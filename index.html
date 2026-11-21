@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wanderlust - Travel Planning Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-icon"><i class="fa-solid fa-compass"></i></div>
+        <span>Wanderlust</span>
+      </div>
+
+      <nav class="nav-menu">
+        <div class="nav-group">
+          <span class="nav-label">Main</span>
+          <button type="button" class="nav-item active" data-view="dashboard">
+            <i class="fa-solid fa-table-columns"></i>
+            <span>Dashboard</span>
+          </button>
+        </div>
+
+        <div class="nav-group">
+          <span class="nav-label">Explore</span>
+          <button type="button" class="nav-item" data-view="holidays">
+            <i class="fa-solid fa-calendar-days"></i>
+            <span>Holidays</span>
+          </button>
+          <button type="button" class="nav-item" data-view="events">
+            <i class="fa-solid fa-ticket"></i>
+            <span>Events</span>
+          </button>
+          <button type="button" class="nav-item" data-view="weather">
+            <i class="fa-solid fa-cloud-sun"></i>
+            <span>Weather</span>
+          </button>
+          <button type="button" class="nav-item" data-view="weekends">
+            <i class="fa-solid fa-umbrella-beach"></i>
+            <span>Long Weekends</span>
+          </button>
+        </div>
+
+        <div class="nav-group">
+          <span class="nav-label">Travel Tools</span>
+          <button type="button" class="nav-item" data-view="currency">
+            <i class="fa-solid fa-coins"></i>
+            <span>Currency</span>
+          </button>
+        </div>
+
+        <div class="nav-group">
+          <span class="nav-label">Personal</span>
+          <button type="button" class="nav-item" data-view="plans">
+            <i class="fa-solid fa-bookmark"></i>
+            <span>My Plans</span>
+            <span id="plans-badge" class="badge-count">0</span>
+          </button>
+        </div>
+      </nav>
+
+      <div class="traveler-box">
+        <div class="traveler-avatar"><i class="fa-solid fa-plane-departure"></i></div>
+        <div>
+          <div class="traveler-name">Traveler</div>
+          <div class="traveler-mode">Planning mode</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Workspace -->
+    <div class="workspace">
+      <header class="top-header">
+        <div>
+          <h1 id="view-title">Dashboard</h1>
+          <p id="view-subtitle">Welcome back! Ready to plan your next adventure?</p>
+        </div>
+        <div id="active-destination-pill" class="destination-pill">
+          <i class="fa-solid fa-location-dot"></i>
+          <span id="active-destination-text">Egypt • Cairo • 2026</span>
+        </div>
+      </header>
+
+      <main class="content-area" aria-live="polite">
+        <!-- 1. Dashboard View -->
+        <section id="view-dashboard" class="view active">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon blue"><i class="fa-solid fa-earth-americas"></i></div>
+              <div>
+                <strong id="stat-countries">90+</strong>
+                <span>Countries Available</span>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon green"><i class="fa-solid fa-calendar-check"></i></div>
+              <div>
+                <strong id="stat-holidays">-</strong>
+                <span>Holidays This Year</span>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon purple"><i class="fa-solid fa-sparkles"></i></div>
+              <div>
+                <strong id="stat-events">500+</strong>
+                <span>Events Worldwide</span>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon amber"><i class="fa-solid fa-heart"></i></div>
+              <div>
+                <strong id="stat-saved">0</strong>
+                <span>Saved Plans</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head">
+              <h2><i class="fa-solid fa-map-location-dot"></i> Select Your Destination</h2>
+              <p>Choose a country, city, and year to explore holidays, events, weather, and long weekends</p>
+            </div>
+
+            <div class="selectors-row">
+              <div class="field">
+                <label for="country-select">Country</label>
+                <select id="country-select"></select>
+              </div>
+              <div class="field">
+                <label for="city-select">City</label>
+                <select id="city-select"></select>
+              </div>
+              <div class="field">
+                <label for="year-select">Year</label>
+                <select id="year-select">
+                  <option value="2026" selected>2026</option>
+                  <option value="2027">2027</option>
+                </select>
+              </div>
+              <div class="field action-field">
+                <button type="button" id="explore-btn" class="btn btn-primary">
+                  <i class="fa-solid fa-compass"></i> Explore
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head">
+              <h2><i class="fa-solid fa-circle-info"></i> Country Information</h2>
+            </div>
+            <div id="country-info-box" class="info-grid"></div>
+          </div>
+        </section>
+
+        <!-- 2. Holidays View -->
+        <section id="view-holidays" class="view">
+          <div class="panel">
+            <div class="panel-head">
+              <h2><i class="fa-solid fa-calendar-days"></i> Public Holidays Explorer</h2>
+              <p id="holidays-context">Official public holidays for your selected country and year</p>
+            </div>
+            <div id="holidays-list" class="cards-grid"></div>
+          </div>
+        </section>
+
+        <!-- 3. Events View -->
+        <section id="view-events" class="view">
+          <div class="panel">
+            <div class="panel-head">
+              <h2><i class="fa-solid fa-ticket"></i> Events Explorer</h2>
+              <p id="events-context">Concerts, sports, culture, and city highlights</p>
+            </div>
+            <div id="events-list" class="cards-grid"></div>
+          </div>
+        </section>
+
+        <!-- 4. Weather View -->
+        <section id="view-weather" class="view">
+          <div class="panel">
+            <div class="panel-head">
+              <h2><i class="fa-solid fa-cloud-sun"></i> 7-Day Weather Forecast</h2>
+              <p id="weather-context">Temperature, humidity, and wind forecast for your selected city</p>
+            </div>
+            <div id="weather-list" class="weather-grid"></div>
+          </div>
+        </section>
+
+        <!-- 5. Long Weekends View -->
+        <section id="view-weekends" class="view">
+          <div class="panel">
+            <div class="panel-head">
+              <h2><i class="fa-solid fa-umbrella-beach"></i> Long Weekend Finder</h2>
+              <p id="weekends-context">Great dates to combine holidays with weekends for mini-trips</p>
+            </div>
+            <div id="weekends-list" class="cards-grid"></div>
+          </div>
+        </section>
+
+        <!-- 6. Currency Converter View -->
+        <section id="view-currency" class="view">
+          <div class="panel">
+            <div class="panel-head">
+              <h2><i class="fa-solid fa-coins"></i> Live Currency Converter</h2>
+              <p>Convert between currencies using live exchange rates</p>
+            </div>
+
+            <div class="currency-box">
+              <div class="currency-inputs">
+                <div class="field">
+                  <label for="amount-input">Amount</label>
+                  <input type="number" id="amount-input" value="100" min="0" step="any" />
+                </div>
+                <div class="field">
+                  <label for="from-currency">From</label>
+                  <select id="from-currency"></select>
+                </div>
+                <div class="field action-field">
+                  <button type="button" id="swap-currency-btn" class="btn btn-secondary" title="Swap currencies">
+                    <i class="fa-solid fa-right-left"></i>
+                  </button>
+                </div>
+                <div class="field">
+                  <label for="to-currency">To</label>
+                  <select id="to-currency"></select>
+                </div>
+              </div>
+
+              <div id="conversion-result" class="conversion-result"></div>
+              <div id="quick-convert-list" class="quick-convert-grid"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 7. My Plans View -->
+        <section id="view-plans" class="view">
+          <div class="panel">
+            <div class="panel-head flex-between">
+              <div>
+                <h2><i class="fa-solid fa-bookmark"></i> My Saved Plans</h2>
+                <p>Saved holidays, events, and long weekends stored in localStorage</p>
+              </div>
+              <button type="button" id="clear-plans-btn" class="btn btn-danger">
+                <i class="fa-solid fa-trash"></i> Clear All
+              </button>
+            </div>
+            <div id="saved-plans-list" class="cards-grid"></div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>
